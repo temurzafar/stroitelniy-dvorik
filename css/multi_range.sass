@@ -1,0 +1,386 @@
+$include-html-range-slider-classes: true !default;
+
+$range-slider-margin: 20px 0 !default;
+$range-slider-track-height: 6px !default;
+$range-slider-track-full-color: #aaa !default;
+$range-slider-track-included-color: #f00 !default;
+$range-slider-thumb-diameter: 30px !default;
+$range-slider-thumb-diameter-medium: $range-slider-thumb-diameter !default;
+$range-slider-thumb-diameter-large: $range-slider-thumb-diameter-medium
+  !default;
+$range-slider-thumb-color: #555 !default;
+$range-slider-output-color: #aaa !default;
+$range-slider-output-border: 1px solid $range-slider-output-color !default;
+$range-slider-output-border-radius: 4px !default;
+$range-slider-output-background: #fff !default;
+$range-slider-output-height: 2.5em !default;
+$range-slider-output-height-medium: $range-slider-output-height !default;
+$range-slider-output-height-large: $range-slider-output-height-medium !default;
+$range-slider-output-bottom-spacing: 1em !default;
+$range-slider-output-bottom-spacing-medium: $range-slider-output-bottom-spacing
+  !default;
+$range-slider-output-bottom-spacing-large: $range-slider-output-bottom-spacing-medium
+  !default;
+$range-slider-output-zindex: null !default;
+$range-slider-thumb-margin-top: (
+    $range-slider-thumb-diameter / -2 + $range-slider-track-height / 2
+  )
+  !default; // used for centering verically
+$range-slider-thumb-margin-top-medium: (
+    $range-slider-thumb-diameter-medium / -2 + $range-slider-track-height / 2
+  )
+  !default; // used for centering verically
+$range-slider-thumb-margin-top-large: (
+    $range-slider-thumb-diameter-large / -2 + $range-slider-track-height / 2
+  )
+  !default; // used for centering verically
+
+// We use this to do clear floats
+@mixin clearfix() {
+  *zoom: 1;
+  &:before, &:after {
+    content: " ";
+    display: table;
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+// default foundation screen size variables
+$small-screen: 640px;
+$medium-screen: 1024px;
+$large-screen: 1440px;
+// additional, in between screen sizes:
+$xlarge-screen: 1660px;
+$tablet-portrait: 768px;
+$mobile-small: 480px;
+$mobile-minimum: 320px;
+$mobile-small-screen: 479px;
+@mixin breakpoint($break) {
+  @if $break == large {
+    // 1440 + desktop
+    @media (min-width: ( #{$large-screen})) {
+      @content;
+    }
+  }
+  @else if $break == medium {
+    // 1024 + tablet landscape and small desktop
+    @media (min-width: (#{$medium-screen})) {
+      @content;
+    }
+  }
+  @else if $break == tablet-only {
+    // 640-1023
+    @media (min-width: #{$mobile-screen}) and (max-width: #{$medium-screen - 1}) {
+      @content;
+    }
+  }
+  @else if $break == tablet {
+    // 768 + tablet portrait
+    @media (min-width: (#{$tablet-portrait})) {
+      @content;
+    }
+  }
+  @else if $break == small {
+    // 640 +
+    @media (min-width: (#{$small-screen})) {
+      @content;
+    }
+  }
+  @else if $break == xsmall {
+    // 480 +
+    @media (min-width: (#{$mobile-small-screen})) {
+      @content;
+    }
+  }
+}
+
+@if $include-html-range-slider-classes != false {
+  .range-slider {
+    @include clearfix();
+
+    margin: $range-slider-margin;
+    padding-top: $range-slider-output-height +
+      $range-slider-output-bottom-spacing;
+    position: relative;
+    text-align: center;
+
+    // Small up
+    @include breakpoint(small) {
+      padding-top: $range-slider-output-height-medium +
+        $range-slider-output-bottom-spacing-medium;
+    }
+
+    // Medium up
+    @include breakpoint(medium) {
+      padding-top: $range-slider-output-height-large +
+        $range-slider-output-bottom-spacing-large;
+    }
+
+    .track {
+      bottom: $range-slider-thumb-diameter / 2;
+      height: $range-slider-track-height;
+      left: 0;
+      margin-bottom: $range-slider-track-height / -2;
+      position: absolute;
+      width: 0;
+      z-index: 50;
+
+      // Small up
+      @include breakpoint(small) {
+        bottom: $range-slider-thumb-diameter-medium / 2;
+      }
+
+      // Medium up
+      @include breakpoint(medium) {
+        bottom: $range-slider-thumb-diameter-large / 2;
+      }
+
+      &--full {
+        background: $range-slider-track-full-color;
+        width: 100%;
+      }
+
+      &--included {
+        background: $range-slider-track-included-color;
+        border-radius: $range-slider-track-height / 2;
+      }
+    }
+
+    .slider-thumb {
+      background: $range-slider-thumb-color;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      display: block\9; //IE hack to display for IE9 and up
+      height: $range-slider-thumb-diameter;
+      left: 0;
+      position: absolute;
+      width: $range-slider-thumb-diameter;
+      z-index: 101;
+
+      // IE10+ hack
+      @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+        display: block;
+      }
+
+      // Small up
+      @include breakpoint(small) {
+        height: $range-slider-thumb-diameter-medium;
+        width: $range-slider-thumb-diameter-medium;
+      }
+
+      // Medium up
+      @include breakpoint(medium) {
+        height: $range-slider-thumb-diameter-large;
+        width: $range-slider-thumb-diameter-large;
+      }
+    }
+
+    [type=range] {
+      -webkit-appearance: none;
+      background: none;
+      height: $range-slider-thumb-diameter;
+      margin: 0;
+      outline: none;
+      padding: 0;
+      pointer-events: none;
+      position: relative;
+      width: 100%;
+      z-index: 75;
+
+      // Small up
+      @include breakpoint(small) {
+        height: $range-slider-thumb-diameter-medium;
+      }
+
+      // Medium up
+      @include breakpoint(medium) {
+        height: $range-slider-thumb-diameter-large;
+      }
+
+      &:focus {
+        outline: none;
+      }
+
+      &::-moz-focus-outer {
+        border: 0;
+      }
+
+      &:first-of-type {
+        float: left;
+        margin-bottom: -1 * $range-slider-thumb-diameter;
+
+        // Small up
+        @include breakpoint(small) {
+          margin-bottom: -1 * $range-slider-thumb-diameter-medium;
+        }
+
+        // Medium up
+        @include breakpoint(medium) {
+          margin-bottom: -1 * $range-slider-thumb-diameter-large;
+        }
+      }
+
+      &:last-of-type {
+        float: right;
+        margin-bottom: 0;
+      }
+
+      // Note that while we're repeating code here,
+      // that's necessary as you can't comma-separate these type of selectors.
+      // Browsers will drop the entire selector if it doesn't understand a part of it.
+      // https://css-tricks.com/styling-cross-browser-compatible-range-inputs-css/
+
+      //////////////////////////////////////
+      // Track styling
+      //////////////////////////////////////
+      &::-webkit-slider-runnable-track {
+        background: none;
+        border: 0;
+        height: $range-slider-track-height;
+        z-index: -1;
+      }
+
+      &::-ms-fill-lower {
+        background: none;
+        border: 0;
+      }
+
+      &::-ms-fill-upper {
+        background: none;
+        border: 0;
+      }
+
+      &::-ms-track {
+        background: transparent;
+        border: 0;
+        border-color: transparent;
+        color: transparent;
+        height: $range-slider-track-height;
+        z-index: -1;
+      }
+
+      &:focus::-ms-fill-lower {
+        background: none;
+        border: 0;
+      }
+
+      &:focus::-ms-fill-upper {
+        background: none;
+        border: 0;
+      }
+
+      &::-moz-range-track {
+        -moz-appearance: none;
+        background: none;
+        border: 0;
+        height: $range-slider-track-height;
+        z-index: -1;
+      }
+
+      //////////////////////////////////////
+      // Slider thumb styling
+      //////////////////////////////////////
+      &::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        background: $range-slider-thumb-color;
+        border: 0;
+        border-radius: 50%;
+        cursor: pointer;
+        height: $range-slider-thumb-diameter;
+        margin-top: $range-slider-thumb-margin-top;
+        outline: 0;
+        pointer-events: all;
+        position: relative;
+        width: $range-slider-thumb-diameter;
+        z-index: 100;
+
+        // Small up
+        @include breakpoint(small) {
+          height: $range-slider-thumb-diameter-medium;
+          margin-top: $range-slider-thumb-margin-top-medium;
+          width: $range-slider-thumb-diameter-medium;
+        }
+
+        // Medium up
+        @include breakpoint(medium) {
+          height: $range-slider-thumb-diameter-large;
+          margin-top: $range-slider-thumb-margin-top-large;
+          width: $range-slider-thumb-diameter-large;
+        }
+      }
+
+      &::-ms-thumb {
+        background: $range-slider-thumb-color;
+        border: 0;
+        border-radius: 50%;
+        cursor: pointer;
+        height: $range-slider-thumb-diameter;
+        margin-top: 0;
+        pointer-events: all;
+        position: relative;
+        width: $range-slider-thumb-diameter;
+        z-index: 100;
+
+        // Small up
+        @include breakpoint(small) {
+          height: $range-slider-thumb-diameter-medium;
+          width: $range-slider-thumb-diameter-medium;
+        }
+
+        // Medium up
+        @include breakpoint(medium) {
+          height: $range-slider-thumb-diameter-large;
+          width: $range-slider-thumb-diameter-large;
+        }
+      }
+
+      &::-moz-range-thumb {
+        -moz-appearance: none;
+        background: $range-slider-thumb-color;
+        border: 0;
+        border-radius: 50%;
+        cursor: pointer;
+        height: $range-slider-thumb-diameter;
+        margin-top: $range-slider-thumb-margin-top;
+        pointer-events: all;
+        position: relative;
+        width: $range-slider-thumb-diameter;
+        z-index: 100;
+
+        // Small up
+        @include breakpoint(small) {
+          height: $range-slider-thumb-diameter-medium;
+          margin-top: $range-slider-thumb-margin-top-medium;
+          width: $range-slider-thumb-diameter-medium;
+        }
+
+        // Medium up
+        @include breakpoint(medium) {
+          height: $range-slider-thumb-diameter-large;
+          margin-top: $range-slider-thumb-margin-top-large;
+          width: $range-slider-thumb-diameter-large;
+        }
+      }
+    }
+
+    .output, output {
+      background: $range-slider-output-background;
+      border: $range-slider-output-border;
+      border-radius: $range-slider-output-border-radius;
+      color: $range-slider-output-color;
+      display: inline-block;
+      height: $range-slider-output-height;
+      left: 50%;
+      line-height: $range-slider-output-height;
+      padding: 0 ($range-slider-output-height - 1) / 2;
+      position: absolute;
+      text-align: center;
+      top: 0;
+      transform: translate(-50%, 0);
+      z-index: $range-slider-output-zindex;
+    }
+  }
+}
